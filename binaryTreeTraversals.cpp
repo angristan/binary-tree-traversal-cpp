@@ -1,5 +1,3 @@
-// binary tree traversal methods
-
 #include <iostream>
 #include "arrayQueue.h"
 #include "binaryTreeNode.h"
@@ -9,88 +7,96 @@ using namespace std;
 
 template <class T>
 void visit(binaryTreeNode<T> *x)
-{// visit node *x, just output element field.
-   cout << x->element << ' ';
+{
+    cout << x->element << ' ';
 }
 
 template <class T>
 void preOrder(binaryTreeNode<T> *t)
 {
-   //Complete the code
-
-   if (t != NULL)
-   {
-      visit(t);                 // visit tree root
-      preOrder(t->leftChild);   // do left subtree
-      preOrder(t->rightChild);  // do right subtree
-   }
+    if (t != NULL) {
+        visit(t);
+        preOrder(t->leftChild);
+        preOrder(t->rightChild);
+    }
 }
 
 template <class T>
 void inOrder(binaryTreeNode<T> *t)
 {
-   //Complete the code below
-
+    if (t != NULL) {
+        inOrder(t->leftChild);
+        visit(t);
+        inOrder(t->rightChild);
+    }
 }
 
 template <class T>
 void postOrder(binaryTreeNode<T> *t)
 {
-   //Complete the code below
-
+    if (t != NULL) {
+        postOrder(t->leftChild);
+        postOrder(t->rightChild);
+        visit(t);
+    }
 }
 
 template <class T>
 void levelOrder(binaryTreeNode<T> *t)
 {
-   //Complete the code below
-   
-   arrayQueue<binaryTreeNode<T>*> q;
-   
+    if (t != NULL) {
+        arrayQueue<binaryTreeNode<T>*> q;
+        binaryTreeNode<int> *curr;
 
+        // Enqueue root element and NULL node as delimiter for level
+        q.push(t);
+        q.push(NULL);
+
+        // We visited all the elements when the queue contains
+        // only the last NULL delimiter
+        while (q.size() > 1)
+        {
+            // Front node of the queue becomes current node and is deleted from the queue
+            curr = q.front();
+            q.pop();
+
+            if (curr == NULL) {
+                // We're at NULL, which means we're starting to visit a new level
+                // That means we just finished to enqueue this level
+                // So we have to delimit its ending with a NULL
+                q.push(NULL);
+            } else {
+                // We add the childs of the current to the next level in the queue
+                if(curr->leftChild)
+                    q.push(curr->leftChild);
+
+                if(curr->rightChild)
+                    q.push(curr->rightChild);
+
+                // Then visit the node
+                visit(curr);
+            }
+        }
+    }
 }
 
 int main(void)
 {
-   /*
-   // Sample: create a binary tree: Sample 
-   binaryTreeNode<int> *top, *left, *right;
-   left = new binaryTreeNode<int> (4);
-   right = new binaryTreeNode<int> (5);
-   head = new binaryTreeNode<int> (2, y, z);
+    binaryTreeNode<int> *root;
+    root = new binaryTreeNode<int> (1);
+    root->leftChild = new binaryTreeNode<int> (2);
+    root->rightChild = new binaryTreeNode<int> (3);
+    root->leftChild->leftChild = new binaryTreeNode<int> (4);
+    root->leftChild->rightChild = new binaryTreeNode<int> (5);
 
-   // Sample: traverse x in all ways
-   cout << "Inorder: ";
-   inOrder(head);
-   cout << endl;
-   */
+    cout << "Inorder: ";
+    inOrder(root);
+    cout << "\nPreorder: ";
+    preOrder(root);
+    cout << "\nPostorder: ";
+    postOrder(root);
+    cout << "\nLevel order: ";
+    levelOrder(root);
 
-   /* Your input tree:
-    *
-    *          1
-    *	      / \
-    *        2   3
-    *       / \
-    *      4   5
-    *
-    */
-
-   /* Your output:
-    *
-    * $> ./binaryTreeTraversals
-    *
-    *     Inorder: 4 2 5 1 3
-    *     Preorder: 1 2 4 5 3
-    *     Postorder: 4 5 2 3 1
-    *     Level order: 1 2 3 4 5
-    *
-    */
-
-   //Complete the code below
-  
-
-
-
-
-   return 0;
+    return 0;
 }
