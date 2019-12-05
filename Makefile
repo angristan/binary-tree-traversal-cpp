@@ -1,9 +1,6 @@
 CC = g++
-
 CFLAGS = -g -Wall
-
 LFLAGS =
-
 TARGET = binaryTreeTraversals
 
 all: $(TARGET)
